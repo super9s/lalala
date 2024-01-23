@@ -1,0 +1,12 @@
+/build
+/bin
+
+*.d
+*.o
+*.out
+
+*.txt
+test.*
+
+metro
+metrod
