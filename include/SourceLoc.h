@@ -3,6 +3,7 @@
 #include <string>
 
 // impl: Lexer.cpp
+
 struct SourceLoc {
   std::string path;
   std::string data;

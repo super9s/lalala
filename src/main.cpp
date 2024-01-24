@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "Token.h"
+#include "Lexer.h"
 
 int main(int argc, char **argv)
 {

@@ -210,7 +210,7 @@ Token *Lexer::lex()
         }
       }
 
-    ate_punct:
+        ate_punct:
     }
 
     // skip spaces.

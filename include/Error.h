@@ -9,5 +9,5 @@ enum ErrorKind {
 
 class Error {
 public:
-  Error();
+    Error();
 };
