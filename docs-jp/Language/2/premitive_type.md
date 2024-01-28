@@ -1,8 +1,12 @@
 # 基本型
 
+名前... 言語での名前 <br>
+Kind... [`TypeInfo`](/include/TypeInfo.h) が持つ `kind` の種類 <br>
+構造体... 処理系で使われる
+
 | | | | |
 |-|-|-|-|
-| 名前      | Kind          | オブジェクト型   | 内部データ型
+| 名前      | Kind          | 構造体   | 内部データ型
 | `object`  | `TYPE_Object` | `Object`          |
 | `none`    | `TYPE_None`   | `ObjNone`         |
 | `int`     | `TYPE_Int`    | `ObjNum<int64_t>` | `int64_t`

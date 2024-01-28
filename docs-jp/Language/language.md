@@ -4,7 +4,7 @@
 - 先に仕様から固めていくので、実装されてない部分が多いです。
 - 過信しないでください。
 
-Contact: <br>
+Contact or spam to developer: <br>
   [Twitter](https://x.com/letttzzz)
 
 ## 1. 基本演算
