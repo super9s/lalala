@@ -14,10 +14,12 @@ enum TokenKind {
   TOK_End
 };
 
+struct SourceLoc;
 struct Token {
   TokenKind kind;
   Token *prev, *next;
   std::string_view str;
+  SourceLoc const &source;
   size_t pos;
 
   union {
@@ -32,19 +34,20 @@ struct Token {
     };
   };
 
-  Token(TokenKind kind, Token *prev, std::string_view str, size_t pos)
+  Token(TokenKind kind, Token *prev, std::string_view str,
+        SourceLoc const &source, size_t pos)
     : kind(kind),
       prev(prev),
       next(nullptr),
       str(str),
+      source(source),
       pos(pos),
       value(0)
   {
   }
 
-  Token(TokenKind kind = TOK_Unknown)
-    : Token(kind, nullptr, "", 0)
+  Token(TokenKind kind, SourceLoc const &source)
+    : Token(kind, nullptr, "", source, 0)
   {
-    this->next = nullptr;
   }
 };

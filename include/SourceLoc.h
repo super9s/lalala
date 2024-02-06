@@ -2,8 +2,6 @@
 
 #include <string>
 
-// impl: Lexer.cpp
-
 struct SourceLoc {
   std::string path;
   std::string data;
@@ -14,5 +12,6 @@ struct SourceLoc {
   {
   }
 
+  // => Lexer.cpp
   static SourceLoc from_text_file(std::string const &path);
 };

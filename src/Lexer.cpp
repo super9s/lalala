@@ -59,8 +59,9 @@ char Lexer::peek()
 
 // ---------------
 //  Lexer.h
-//    -> Lexer::peek()
+//    -> Lexer::pass_space()
 //
+//  Skip spaces
 // ---------------
 void Lexer::pass_space()
 {
@@ -70,8 +71,9 @@ void Lexer::pass_space()
 
 // ---------------
 //  Lexer.h
-//    -> Lexer::peek()
+//    -> Lexer::eat()
 //
+//  add a count of length of str to Lexer::position if found that.
 // ---------------
 bool Lexer::eat(std::string_view str)
 {
@@ -85,7 +87,7 @@ bool Lexer::eat(std::string_view str)
 
 // ---------------
 //  Lexer.h
-//    -> Lexer::peek()
+//    -> Lexer::match()
 //
 //  Check if found an any string on current pos.
 // ---------------
@@ -97,9 +99,9 @@ bool Lexer::match(std::string_view str)
 
 // ---------------
 //  Lexer.h
-//    -> Lexer::peek()
+//    -> Lexer::pass_while()
 //
-//  Skip a spaces.
+//  skip characters which returned true by function @cond.
 // ---------------
 size_t Lexer::pass_while(std::function<bool(char)> cond)
 {
@@ -119,7 +121,7 @@ size_t Lexer::pass_while(std::function<bool(char)> cond)
 // ========================
 Token *Lexer::lex()
 {
-  Token top;
+  Token top{ TOK_Unknown, this->source };
   Token *cur = &top;
 
   // skip first spaces
@@ -131,9 +133,10 @@ Token *Lexer::lex()
 
     // hex
     if (this->eat("0x") || this->eat("0X")) {
-      cur = new Token(
-          TOK_Int, cur,
-          { this->src.data() + pos, this->pass_while(isxdigit) + 2 }, pos);
+      cur =
+          new Token(TOK_Int, cur,
+                    { this->src.data() + pos, this->pass_while(isxdigit) + 2 },
+                    this->source, pos);
 
       cur->value = std::stoi(std::string(cur->str), nullptr, 16);
     }
@@ -145,16 +148,16 @@ Token *Lexer::lex()
           { this->src.data() + pos, this->pass_while([](char c) -> bool {
              return c == '0' || c == '1';
            }) + 2 },
-          pos);
+          this->source, pos);
 
       cur->value = std::stoi(std::string(cur->str), nullptr, 2);
     }
 
     // digit (0 ~ 9)
     else if (std::isdigit(ch)) {
-      cur =
-          new Token(TOK_Int, cur,
-                    { this->src.data() + pos, this->pass_while(isdigit) }, pos);
+      cur = new Token(TOK_Int, cur,
+                      { this->src.data() + pos, this->pass_while(isdigit) },
+                      this->source, pos);
 
       // if found '.', is this a float ?
       if (this->peek() == '.') {
@@ -198,26 +201,26 @@ Token *Lexer::lex()
           { this->src.data() + pos, this->pass_while([](char c) -> bool {
              return isalnum(c) || c == '_';
            }) },
-          pos);
+          this->source, pos);
     }
 
     // punctuaters or other
     else {
-      for (std::string_view &&pu : punctuaters) {
+      for (std::string_view pu : punctuaters) {
         if (this->eat(pu)) {
-          cur = new Token(TOK_Punct, cur, pu, pos);
+          cur = new Token(TOK_Punct, cur, pu, this->source, pos);
           goto ate_punct;
         }
       }
 
-        ate_punct:
+    ate_punct:;
     }
 
     // skip spaces.
     this->pass_space();
   }
 
-  cur = new Token(TOK_End, cur, "", this->position);
+  cur = new Token(TOK_End, cur, "", this->source, this->position);
 
   return top.next;
 }

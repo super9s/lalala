@@ -4,6 +4,8 @@
 - 先に仕様から固めていくので、実装されてない部分が多いです。
 - 過信しないでください。
 
+本書において処理系という場合、私が作った公式のことを指します。
+
 Contact or spam to developer: <br>
   [Twitter](https://x.com/letttzzz)
 
